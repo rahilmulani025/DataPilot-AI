@@ -1,7 +1,8 @@
+from app.routes.projects import router as projects_router
 from fastapi import FastAPI, UploadFile, File
 import shutil
 import os
-import uuid
+
 
 from app.services.profiler import profile_dataset
 from app.services.quality import analyze_quality
@@ -16,6 +17,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.include_router(projects_router)
 
 RAW_DATA_DIR = "../data/raw"
 CLEANED_DATA_DIR = "../data/cleaned"
@@ -34,17 +36,7 @@ def health():
     }
 
 
-@app.post("/projects")
-def create_project(name: str = "New Project"):
 
-    project_id = str(uuid.uuid4())
-
-    return {
-        "status": "success",
-        "project_id": project_id,
-        "name": name,
-        "message": "Project created successfully"
-    }
 
 
 @app.post("/projects/{project_id}/upload")
